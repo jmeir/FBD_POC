@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>FBD Entra External ID Demo</title>
-  <script src="https://alcdn.msauth.net/browser/2.39.3/js/msal-browser.min.js"></script>
+  <script src="https://unpkg.com/@azure/msal-browser@2.39.0/lib/msal-browser.min.js"></script>
 </head>
 <body>
   <h2>FBD Entra External ID Demo</h2>
@@ -13,29 +13,37 @@
   <pre id="output"></pre>
 
   <script>
-    const msalConfig = {
-      auth: {
-        clientId: "8d08810f-4f08-45ba-b376-b471801b0c83",
-        authority: "https://extidtest1.ciamlogin.com/0cc4e50b-cb60-4d44-8ab4-c124e5d976c4",
-        redirectUri: window.location.href
-      }
-    };
+  // Wait until MSAL is actually available
+  if (!window.msal) {
+    console.error("MSAL failed to load");
+  }
 
-    const msalInstance = new msal.PublicClientApplication(msalConfig);
-
-    function signIn() {
-      msalInstance.loginPopup({
-        scopes: ["openid", "profile"]
-      }).then(response => {
-        document.getElementById("output").textContent =
-          JSON.stringify(response.account, null, 2);
-      }).catch(error => console.log(error));
+  const msalConfig = {
+    auth: {
+      clientId: "3c7311d8-57cd-4488-90fb-a7f732f6db86",
+      authority: "https://DOJEEIDNCSCDEV.ciamlogin.com/29a87ad4-6240-4f00-becc-8d2a3f0fde46",
+      redirectUri: window.location.href
     }
+  };
 
-    function signOut() {
-      msalInstance.logoutPopup();
-      document.getElementById("output").textContent = "";
-    }
+  const msalInstance = new msal.PublicClientApplication(msalConfig);
+
+  function signIn() {
+    msalInstance.loginPopup({
+      scopes: ["openid", "profile"]
+    }).then(response => {
+      document.getElementById("output").textContent =
+        JSON.stringify(response.account, null, 2);
+    }).catch(error => console.error(error));
+  }
+
+  function signOut() {
+    msalInstance.logoutPopup();
+    document.getElementById("output").textContent = "";
+  }
+</script>
+</body>
+</html>
   </script>
 </body>
 </html>
